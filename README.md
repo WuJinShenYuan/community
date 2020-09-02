@@ -11,6 +11,19 @@
 [授权OAuth应用](https://docs.github.com/en/developers/apps/authorizing-oauth-apps)
 
 ## 工具
-[Git](https://git-scm.com/download)    
-[Bootstrap](https://v3.bootcss.com/getting-started/#download)
-[okHttp](https://square.github.io/okhttp/)
+[Git](https://git-scm.com/download)  
+[Bootstrap](https://v3.bootcss.com/getting-started/#download)  
+[okHttp](https://square.github.io/okhttp/)  
+[jQuery](https://jquery.com/download/)  
+
+## 脚本
+```sql
+CREATE TABLE `user`(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	account_id VARCHAR(100),
+	name VARCHAR(50),
+	token CHAR(36),
+	gmt_create BIGINT,
+	gmt_modified BIGINT
+)ENGINE=Innodb DEFAULT CHARSET=utf8;
+```
