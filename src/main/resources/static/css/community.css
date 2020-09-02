@@ -1,0 +1,14 @@
+.publish_body{
+    background-color: #efefef;
+}
+.publish_main{
+    margin: 30px 150px;
+    background-color: white;
+}
+.publish_nav{
+    margin: 0 150px;
+}
+.publish_button_release{
+    float: right;
+    margin-bottom: 15px;
+}

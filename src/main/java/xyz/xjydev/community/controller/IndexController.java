@@ -23,6 +23,7 @@ public class IndexController {
     /** 到达首页 */
     @GetMapping("/")
     public String hello(HttpServletRequest request){
+        // 查看cookie中是否有数据库中保存的token,通过token获取用户数据
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if(cookie.getName().equals("token")){
