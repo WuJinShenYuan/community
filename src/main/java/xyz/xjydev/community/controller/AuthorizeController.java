@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import xyz.xjydev.community.dto.AccessTokenDTO;
 import xyz.xjydev.community.dto.GithubUser;
-import xyz.xjydev.community.mapper.UserMapper;
 import xyz.xjydev.community.model.User;
 import xyz.xjydev.community.provider.GithubProvider;
+import xyz.xjydev.community.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +19,7 @@ import java.util.UUID;
 /**
  * @author: 28767
  * @date: 2020/9/1 9:01
+ * github登录授权控制器
  */
 
 @Controller
@@ -37,7 +38,7 @@ public class AuthorizeController {
     private String redirectUrl;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @GetMapping("/callback")
     public String classback(@RequestParam(value = "code") String code,
@@ -52,7 +53,7 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser=githubProvider.getUser(accessToken);
-        if(githubUser !=null){
+        if(githubUser !=null && githubUser.getId() !=null){
             // 把用户数据写入数据库
             User user = new User();
             String token = UUID.randomUUID().toString();
@@ -61,7 +62,7 @@ public class AuthorizeController {
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
-            userMapper.insert(user);
+            userService.insertUser(user);
             response.addCookie(new Cookie("token",token));
             // 登录成功,写cookie和session
             request.getSession().setAttribute("user",githubUser);

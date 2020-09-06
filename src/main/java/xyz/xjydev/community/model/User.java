@@ -3,6 +3,7 @@ package xyz.xjydev.community.model;
 /**
  * @author: 28767
  * @date: 2020/9/1 22:06
+ * user实体类
  */
 
 public class User {

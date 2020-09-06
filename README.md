@@ -17,7 +17,7 @@
 [jQuery](https://jquery.com/download/)  
 
 ## 脚本
-```sql
+```创建user表
 CREATE TABLE `user`(
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	account_id VARCHAR(100),
@@ -25,5 +25,19 @@ CREATE TABLE `user`(
 	token CHAR(36),
 	gmt_create BIGINT,
 	gmt_modified BIGINT
+)ENGINE=Innodb DEFAULT CHARSET=utf8;
+```
+```创建question表
+CREATE TABLE `question`(
+	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	title VARCHAR(50),
+	description LONGTEXT,
+	gmt_create BIGINT,
+	gmt_modified BIGINT,
+	creator INT,
+	comment_count INT DEFAULT 0,
+	view_count INT DEFAULT 0,
+	like_count INT DEFAULT 0,
+	tag VARCHAR(255)
 )ENGINE=Innodb DEFAULT CHARSET=utf8;
 ```

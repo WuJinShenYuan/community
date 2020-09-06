@@ -1,3 +1,16 @@
+/* 首页的css */
+.index_body{
+    background-color: #efefef;
+}
+.index_main{
+    margin: 30px 150px;
+    background-color: white;
+}
+.index_nav{
+    margin: 0 150px;
+}
+
+/* publish页面的css */
 .publish_body{
     background-color: #efefef;
 }
