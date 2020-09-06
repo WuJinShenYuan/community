@@ -17,8 +17,8 @@ import xyz.xjydev.community.model.User;
 @Repository
 public interface UserMapper {
 
-    @Insert("insert into user (account_id,name,token,gmt_create,gmt_modified)" +
-            " values (#{accountId},#{name},#{token},#{gmtCreate},#{gmtModified})")
+    @Insert("insert into user (account_id,name,token,gmt_create,gmt_modified,bio,avatar_url)" +
+            " values (#{accountId},#{name},#{token},#{gmtCreate},#{gmtModified},#{bio},#{avatarUrl})")
     void insertUser(User user);
 
     @Select("select * from user where token=#{token}")

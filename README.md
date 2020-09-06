@@ -15,6 +15,7 @@
 [Bootstrap](https://v3.bootcss.com/getting-started/#download)  
 [okHttp](https://square.github.io/okhttp/)  
 [jQuery](https://jquery.com/download/)  
+[Lombok](https://projectlombok.org/)  
 
 ## 脚本
 ```创建user表

@@ -36,17 +36,19 @@ public class UserServiceImpl implements UserService {
     public User FindUserByCookie(HttpServletRequest httpServletRequest) {
         // 查看cookie中是否有数据库中保存的token,通过token获取用户数据
         Cookie[] cookies = httpServletRequest.getCookies();
-        for (Cookie cookie : cookies) {
-            if(cookie.getName().equals("token")){
-                String token=cookie.getValue();
-                User user=userMapper.findByToken(token);
-                if(user !=null){
-                    if(httpServletRequest.getSession().getAttribute("user")==null){
-                        httpServletRequest.getSession().setAttribute("user",user);
+        if(cookies !=null && cookies.length !=0){
+            for (Cookie cookie : cookies) {
+                if(cookie.getName().equals("token")){
+                    String token=cookie.getValue();
+                    User user=userMapper.findByToken(token);
+                    if(user !=null){
+                        if(httpServletRequest.getSession().getAttribute("user")==null){
+                            httpServletRequest.getSession().setAttribute("user",user);
+                        }
+                        return user;
                     }
-                    return user;
+                    break;
                 }
-                break;
             }
         }
         return null;
