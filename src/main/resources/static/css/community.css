@@ -3,11 +3,20 @@
     background-color: #efefef;
 }
 .index_main{
-    margin: 30px 150px;
+    margin: 30px 200px;
     background-color: white;
 }
 .index_nav{
-    margin: 0 150px;
+    margin: 0 200px;
+}
+.question_img{
+    width: 40px;
+    height: 40px;
+}
+.question_text{
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
 }
 
 /* publish页面的css */
@@ -15,11 +24,11 @@
     background-color: #efefef;
 }
 .publish_main{
-    margin: 30px 150px;
+    margin: 30px 200px;
     background-color: white;
 }
 .publish_nav{
-    margin: 0 150px;
+    margin: 0 200px;
 }
 .publish_button_release{
     float: right;

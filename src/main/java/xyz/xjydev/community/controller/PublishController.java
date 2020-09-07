@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import xyz.xjydev.community.mapper.QuestionMapper;
 import xyz.xjydev.community.model.Question;
 import xyz.xjydev.community.model.User;
+import xyz.xjydev.community.service.QuestionService;
 import xyz.xjydev.community.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PublishController {
 
     @Autowired
-    private QuestionMapper questionMapper;
+    private QuestionService questionService;
 
     @Autowired
     private UserService userService;
@@ -70,7 +71,7 @@ public class PublishController {
         question.setGmtModified(question.getGmtCreate());
         question.setCreator(user.getId());
         question.setTag(tag);
-        questionMapper.create(question);
+        questionService.createQuestion(question);
         return "redirect:/";
     }
 }
