@@ -1,0 +1,45 @@
+# 服务器端口配置
+server:
+  port: 8887
+
+# 全局属性配置
+github:
+  client:
+    id: d02bb3f971ea9947d521
+    secret: 2ccb688fbe42a38b83e38ef854d0bcd9727a107d
+  redirect:
+    url: http://localhost:8887/callback
+
+# 数据库连接配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/communitydb?useUnicode=true&useSSL=false&characterEncoding=UTF8&serverTimezone=UTC
+    username: root
+    password: cptbtptq123asdqw
+  # 关闭thymeleaf页面缓存
+  thymeleaf.cache: false
+  devtools:
+    # 热部署生效
+    restart.enabled: true
+    # 是否支持livereload
+    livereload:
+      enabled: true
+    restart:
+      # 设置重启的目录,添加那个目录的文件需要restart
+      additional-paths: src/main/*
+      # 设置不需要重启的目录
+      exclude: static/**,public/**
+
+# 启用驼峰自动转换下划线
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+# pagehelper分页插件配置
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+

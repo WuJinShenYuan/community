@@ -4,6 +4,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.xjydev.community.dto.PaginationDTO;
 import xyz.xjydev.community.dto.QuestionDTO;
 import xyz.xjydev.community.mapper.QuestionMapper;
 import xyz.xjydev.community.mapper.UserMapper;
@@ -35,11 +36,32 @@ public class QuestionServiceImpl implements QuestionService {
         questionMapper.createQuestion(question);
     }
 
-    /** 输出问题数据列表 */
+    /** 输出问题数据列表
+     * @param page
+     * @param size
+     * @return*/
     @Override
-    public List<QuestionDTO> findQuestionList() {
-        List<Question> questionList=questionMapper.findQuestionList();
+    public PaginationDTO findQuestionList(Integer page, Integer size) {
+        Integer totalCount=questionMapper.selectTotal();
+        // 有多少页
+        Integer totalPage = 0;
+        if (totalCount % size == 0) {
+            totalPage = totalCount / size;
+        } else {
+            totalPage = totalCount / size + 1;
+        }
+        // 最少第一页,最大最后一页
+        if(page<1){
+            page=1;
+        }else if(page>totalPage){
+            page=totalPage;
+        }
+        Integer offset= size * (page - 1);
+        List<Question> questionList=questionMapper.findQuestionList(offset,size);
+
+        /** 给questionDTOList写入数据 */
         List<QuestionDTO> questionDTOList=new ArrayList<>();
+        PaginationDTO paginationDTO = new PaginationDTO();
         for (Question question : questionList) {
             User user=userMapper.findById(question.getCreator());
             QuestionDTO questionDTO=new QuestionDTO();
@@ -47,6 +69,10 @@ public class QuestionServiceImpl implements QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        return questionDTOList;
+
+        /** 给paginationDTO写入数据 */
+        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setPagination(totalPage,page,size);
+        return paginationDTO;
     }
 }

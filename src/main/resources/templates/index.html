@@ -52,10 +52,10 @@
     <div class="container-fluid index_main">
         <div class="row">
             <!-- 文章列表部分 -->
-            <div class="col-lg-9 col-md-9 col-md-12 col-xs-12">
-                <h2><span class="glyphicon glyphicon-lis" aria-hidden="true"></span>发起</h2>
+            <div class="col-lg-9 col-md-9 col-md-12 col-xs-12" style="border-right: 1px solid rgba(0,0,0,0.1)">
+                <h3><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 发现</h3>
                 <hr />
-                <div th:each="question : ${questionDTOList}" class="media">
+                <div th:each="question : ${paginations.questions}" class="media">
                     <div class="media-left">
                         <a href="#">
                             <img class="media-object img-rounded question_img" th:src="${question.user.avatarUrl}" alt="...">
@@ -65,9 +65,38 @@
                         <h4 class="media-heading" th:text="${question.title}"></h4>
                         <span class="question_text" th:text="${question.commentCount}+' 个评论 • '"></span>
                         <span class="question_text" th:text="${question.viewCount}+' 次浏览 • '"></span>
-                        <span class="question_text" th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd')}+' 小时前'"></span>
+                        <span class="question_text" th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}+' 小时前'"></span>
                     </div>
+                    <hr />
                 </div>
+                <!-- 分页 -->
+                <nav aria-label="Page navigation" style="float:right;">
+                    <ul class="pagination active">
+                        <li th:if="${paginations.showFirstPage}">
+                            <a th:href="@{/(page=1)}" aria-label="FistPage">
+                                <span aria-hidden="true">&lt;&lt;</span>
+                            </a>
+                        </li>
+                        <li th:if="${paginations.showPrevious}">
+                            <a th:href="@{/(page=${paginations.page}-1)}" aria-label="Previous">
+                                <span aria-hidden="true">&lt;</span>
+                            </a>
+                        </li>
+                        <li th:each="page : ${paginations.pages}" th:class="${paginations.page==page}?'active':''">
+                            <a th:text="${page}" th:href="@{/(page=${page})}"></a>
+                        </li>
+                        <li th:if="${paginations.showNext}">
+                            <a th:href="@{/(page=${paginations.page}+1)}" aria-label="Next">
+                                <span aria-hidden="true">&gt;</span>
+                            </a>
+                        </li>
+                        <li th:if="${paginations.showLastPage}">
+                            <a th:href="@{/(page=${paginations.totalPage})}" aria-label="LastPage">
+                                <span aria-hidden="true">&gt;&gt;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
             <!-- 热门话题部分 -->
             <div class="col-lg-3 col-md-3 hidden-sm hidden-xs">

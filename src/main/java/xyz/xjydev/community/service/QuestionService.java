@@ -1,5 +1,6 @@
 package xyz.xjydev.community.service;
 
+import xyz.xjydev.community.dto.PaginationDTO;
 import xyz.xjydev.community.dto.QuestionDTO;
 import xyz.xjydev.community.model.Question;
 
@@ -14,5 +15,5 @@ public interface QuestionService {
 
     void createQuestion(Question question);
 
-    List<QuestionDTO> findQuestionList();
+    PaginationDTO findQuestionList(Integer tage, Integer size);
 }
