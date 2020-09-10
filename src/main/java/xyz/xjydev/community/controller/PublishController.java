@@ -6,11 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import xyz.xjydev.community.mapper.QuestionMapper;
 import xyz.xjydev.community.model.Question;
 import xyz.xjydev.community.model.User;
 import xyz.xjydev.community.service.QuestionService;
-import xyz.xjydev.community.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,16 +24,13 @@ public class PublishController {
     @Autowired
     private QuestionService questionService;
 
-    @Autowired
-    private UserService userService;
-
     @GetMapping("/publish")
-    public String publish(){
+    public String toPublish(){
         return "publish";
     }
 
     @PostMapping("/publish")
-    public String doPublish(@RequestParam("title") String title,
+    public String publish(@RequestParam("title") String title,
                             @RequestParam("description") String description,
                             @RequestParam("tag") String tag,
                             HttpServletRequest request,
@@ -57,7 +52,7 @@ public class PublishController {
         }
 
         Question question =new Question();
-        User user=userService.FindUserByCookie(request);
+        User user=(User) request.getSession().getAttribute("user");
 
         // 以后可以设置为只有登录了才能访问该页面
         if (user==null){

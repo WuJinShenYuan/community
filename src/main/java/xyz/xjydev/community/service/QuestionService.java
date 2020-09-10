@@ -15,5 +15,7 @@ public interface QuestionService {
 
     void createQuestion(Question question);
 
-    PaginationDTO findQuestionList(Integer tage, Integer size);
+    PaginationDTO findQuestionList(Integer page, Integer size);
+
+    PaginationDTO findQuestionList(Integer id, Integer page, Integer size);
 }

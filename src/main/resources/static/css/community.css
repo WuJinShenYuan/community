@@ -1,14 +1,19 @@
-/* 首页的css */
-.index_body{
+/* 公共css */
+.common_body{
     background-color: #efefef;
 }
+
+/* header页面的css */
+.header_nav{
+    margin: 0 200px;
+}
+
+/* 首页的css */
 .index_main{
     margin: 30px 200px;
     background-color: white;
 }
-.index_nav{
-    margin: 0 200px;
-}
+
 .question_img{
     width: 40px;
     height: 40px;
@@ -19,6 +24,7 @@
     color: #999;
 }
 
+
 /* publish页面的css */
 .publish_body{
     background-color: #efefef;
@@ -27,10 +33,12 @@
     margin: 30px 200px;
     background-color: white;
 }
-.publish_nav{
-    margin: 0 200px;
-}
 .publish_button_release{
     float: right;
     margin-bottom: 15px;
+}
+
+/* profile页面的样式 */
+.list-group{
+    margin-top: 20px;
 }

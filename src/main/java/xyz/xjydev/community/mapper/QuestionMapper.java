@@ -28,7 +28,15 @@ public interface QuestionMapper {
     @Select("select * from question limit #{offset}, #{size}")
     List<Question> findQuestionList(@Param("offset") Integer offset,@Param("size") Integer size);
 
-    /** 查询question表有多少条数据 */
+    /** 根据id分页查询问题数据 */
+    @Select("select * from question where creator=#{creator} limit #{offset}, #{size} ")
+    List<Question> findQuestionListById(@Param("creator") Integer id,@Param("offset") Integer offset,@Param("size") Integer size);
+
+    /** 查询有多少条数据 */
     @Select("select count(*) from question")
     Integer selectTotal();
+
+    /** 根据id查询有多少条数据 */
+    @Select("select count(*) from question where creator=#{creator}")
+    Integer selectTotalById(@Param("creator") Integer id);
 }

@@ -57,7 +57,53 @@ public class QuestionServiceImpl implements QuestionService {
             page=totalPage;
         }
         Integer offset= size * (page - 1);
+        if(offset<0){
+            offset=0;
+        }
         List<Question> questionList=questionMapper.findQuestionList(offset,size);
+
+        /** 给questionDTOList写入数据 */
+        List<QuestionDTO> questionDTOList=new ArrayList<>();
+        PaginationDTO paginationDTO = new PaginationDTO();
+        for (Question question : questionList) {
+            User user=userMapper.findById(question.getCreator());
+            QuestionDTO questionDTO=new QuestionDTO();
+            BeanUtils.copyProperties(question,questionDTO);
+            questionDTO.setUser(user);
+            questionDTOList.add(questionDTO);
+        }
+
+        /** 给paginationDTO写入数据 */
+        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setPagination(totalPage,page,size);
+        return paginationDTO;
+    }
+
+    @Override
+    public PaginationDTO findQuestionList(Integer id, Integer page, Integer size) {
+        // 当前用户的问题数据数
+         Integer totalCountById =questionMapper.selectTotalById(id);
+
+        // 有多少页
+        Integer totalPage = 0;
+        if (totalCountById % size == 0) {
+            totalPage = totalCountById / size;
+        } else {
+            totalPage = totalCountById / size + 1;
+        }
+
+        // 最少第一页,最大最后一页
+        if(page<1){
+            page=1;
+        }else if(page>totalPage){
+            page=totalPage;
+        }
+
+        Integer offset= size * (page - 1);
+        if(offset<0){
+            offset=0;
+        }
+        List<Question> questionList=questionMapper.findQuestionListById(id,offset,size);
 
         /** 给questionDTOList写入数据 */
         List<QuestionDTO> questionDTOList=new ArrayList<>();
