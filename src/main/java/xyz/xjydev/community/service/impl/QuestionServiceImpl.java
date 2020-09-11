@@ -79,8 +79,9 @@ public class QuestionServiceImpl implements QuestionService {
         return paginationDTO;
     }
 
+    /** 根据用户id查询问题列表 */
     @Override
-    public PaginationDTO findQuestionList(Integer id, Integer page, Integer size) {
+    public PaginationDTO findQuestionListById(Integer id, Integer page, Integer size) {
         // 当前用户的问题数据数
          Integer totalCountById =questionMapper.selectTotalById(id);
 
@@ -120,5 +121,18 @@ public class QuestionServiceImpl implements QuestionService {
         paginationDTO.setQuestions(questionDTOList);
         paginationDTO.setPagination(totalPage,page,size);
         return paginationDTO;
+    }
+
+    @Override
+    public QuestionDTO getById(Integer id) {
+
+        // 根据问题id查询问题数据,并放入DTO中
+        Question question= questionMapper.findById(id);
+        User user=userMapper.findById(question.getCreator());
+        QuestionDTO questionDTO=new QuestionDTO();
+        BeanUtils.copyProperties(question,questionDTO);
+        questionDTO.setUser(user);
+
+        return questionDTO;
     }
 }

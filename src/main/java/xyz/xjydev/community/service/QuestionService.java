@@ -17,5 +17,7 @@ public interface QuestionService {
 
     PaginationDTO findQuestionList(Integer page, Integer size);
 
-    PaginationDTO findQuestionList(Integer id, Integer page, Integer size);
+    PaginationDTO findQuestionListById(Integer id, Integer page, Integer size);
+
+    QuestionDTO getById(Integer id);
 }

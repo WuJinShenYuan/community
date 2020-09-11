@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${question.title}"></title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="/css/community.css" />
+    <script src="/js/jquery-3.5.1.js" type="application/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+
+</head>
+<body class="common_body">
+
+<!-- 导航栏 -->
+<div th:replace="~{header :: nav}"></div>
+
+<!-- 个人主页主体部分 -->
+<div class="container-fluid index_main">
+    <div class="row">
+
+        <!-- 主页详情部分 -->
+        <div class="col-lg-9 col-md-9 col-md-12 col-xs-12 question_left" style="border-right: 1px solid rgba(0,0,0,0.1)">
+            <h3><span th:text="${question.title}"></span></h3>
+            <div class="text-desc">
+                <span class="question_text" th:text="'作者 '+${question.user.name}+' | '"></span>
+                <span class="question_text" th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}+' 小时前 | '"></span>
+                <span class="question_text" th:text="'阅读数: '+${question.viewCount}"></span>
+            </div>
+            <hr />
+
+            <div th:text="${question.description}">
+            </div>
+            <hr />
+
+            <a class="question_a" th:href="@{'/publish/'+${question.id}}">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;编辑&nbsp;&nbsp;
+            </a>
+            <a class="question_a">
+                <span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;相关链接&nbsp;&nbsp;
+            </a>
+        </div>
+
+
+        <!-- 主页菜单部分 -->
+        <div class="col-lg-3 col-md-3 hidden-sm hidden-xs question_right">
+            <div>
+                <h3>发起人</h3>
+                <div class="media">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object img-rounded index_question_img" th:src="${question.user.avatarUrl}" alt="...">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <a th:href="@{'/question/'+${question.id}}"><h4 class="media-heading" th:text="${question.user.name}"></h4></a>
+                        <span class="index_question_text" th:text="${question.user.bio}"></span>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div>
+                <h3>相关问题</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
