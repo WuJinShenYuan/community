@@ -29,11 +29,11 @@ public class IndexController {
                         @RequestParam(value = "page",defaultValue = "1") Integer page,
                         @RequestParam(value = "size",defaultValue = "5") Integer size
                         ){
-//        // 查看cookie中是否有数据库中保存的token,通过token获取用户数据
-//        userService.FindUserByCookie(request);
         // 查询出所有问题列表
         PaginationDTO paginations=questionService.findQuestionList(page,size);
         model.addAttribute("paginations",paginations);
         return "index";
     }
+
+
 }

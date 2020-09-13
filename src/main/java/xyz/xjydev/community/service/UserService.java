@@ -1,9 +1,11 @@
 package xyz.xjydev.community.service;
 
 import org.apache.ibatis.annotations.Param;
+import xyz.xjydev.community.dto.GithubUser;
 import xyz.xjydev.community.model.User;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author: 28767
@@ -17,4 +19,6 @@ public interface UserService {
     User findByToken(@Param("token") String token);
 
     User FindUserByCookie(HttpServletRequest httpServletRequest);
+
+    void createOnUpdate(HttpServletResponse response, GithubUser githubUser);
 }

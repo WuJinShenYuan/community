@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import xyz.xjydev.community.dto.QuestionDTO;
-import xyz.xjydev.community.model.Question;
 import xyz.xjydev.community.service.QuestionService;
 
 /**

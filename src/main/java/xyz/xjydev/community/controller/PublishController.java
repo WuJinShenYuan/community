@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import xyz.xjydev.community.dto.QuestionDTO;
 import xyz.xjydev.community.model.Question;
 import xyz.xjydev.community.model.User;
 import xyz.xjydev.community.service.QuestionService;
@@ -29,10 +31,22 @@ public class PublishController {
         return "publish";
     }
 
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable("id") Integer id,
+                       Model model){
+        QuestionDTO questionDTO=questionService.getById(id);
+        model.addAttribute("id",id);
+        model.addAttribute("title",questionDTO.getTitle());
+        model.addAttribute("description",questionDTO.getDescription());
+        model.addAttribute("tag",questionDTO.getTag());
+        return "publish";
+    }
+
     @PostMapping("/publish")
     public String publish(@RequestParam("title") String title,
                             @RequestParam("description") String description,
                             @RequestParam("tag") String tag,
+                            @RequestParam("id") Integer id,
                             HttpServletRequest request,
                             Model model){
         model.addAttribute("title",title);
@@ -60,13 +74,12 @@ public class PublishController {
             return "publish";
         }
 
+        question.setId(id);
         question.setTitle(title);
         question.setDescription(description);
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(question.getGmtCreate());
         question.setCreator(user.getId());
         question.setTag(tag);
-        questionService.createQuestion(question);
+        questionService.createOnUpdate(question);
         return "redirect:/";
     }
 }

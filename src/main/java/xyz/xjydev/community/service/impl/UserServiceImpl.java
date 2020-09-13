@@ -3,12 +3,15 @@ package xyz.xjydev.community.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.xjydev.community.dto.GithubUser;
 import xyz.xjydev.community.mapper.UserMapper;
 import xyz.xjydev.community.model.User;
 import xyz.xjydev.community.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 /**
  * @author: 28767
@@ -52,5 +55,37 @@ public class UserServiceImpl implements UserService {
             }
         }
         return null;
+    }
+
+    @Override
+    public void createOnUpdate(HttpServletResponse response, GithubUser githubUser) {
+        User dbUser=userMapper.findByAccountId(String.valueOf(githubUser.getId()));
+        System.out.println("成功");
+        // 判断数据库是否已经有user数据
+        if(dbUser==null){
+            // 插入
+            System.out.println("插入");
+            User user = new User();
+            String token = UUID.randomUUID().toString();
+            user.setName(githubUser.getName());
+            user.setToken(token);
+            user.setAccountId(String.valueOf(githubUser.getId()));
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+            user.setBio(githubUser.getBio());
+            user.setAvatarUrl(githubUser.getAvatarUrl());
+            response.addCookie(new Cookie("token",token));
+            userMapper.insertUser(user);
+//            request.getSession().setAttribute("user",user);
+        }else{
+            // 更新
+            System.out.println("更新");
+            dbUser.setName(githubUser.getName());
+            dbUser.setToken(UUID.randomUUID().toString());
+            dbUser.setGmtModified(System.currentTimeMillis());
+            dbUser.setBio(githubUser.getBio());
+            dbUser.setAvatarUrl(githubUser.getAvatarUrl());
+            userMapper.updateUser(dbUser);
+        }
     }
 }

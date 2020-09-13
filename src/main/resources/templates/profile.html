@@ -26,11 +26,11 @@
             <div th:each="question : ${paginations.questions}" class="media">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object img-rounded question_img" th:src="${question.user.avatarUrl}" alt="...">
+                        <img class="media-object img-rounded profile_question_img" th:src="${question.user.avatarUrl}" alt="...">
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${question.title}"></h4>
+                    <h4 class="media-heading"><a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a></h4>
                     <span class="question_text" th:text="${question.commentCount}+' 个评论 • '"></span>
                     <span class="question_text" th:text="${question.viewCount}+' 次浏览 • '"></span>
                     <span class="question_text" th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}+' 小时前'"></span>

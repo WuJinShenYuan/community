@@ -7,14 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import xyz.xjydev.community.dto.AccessTokenDTO;
 import xyz.xjydev.community.dto.GithubUser;
-import xyz.xjydev.community.model.User;
 import xyz.xjydev.community.provider.GithubProvider;
 import xyz.xjydev.community.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
 
 /**
  * @author: 28767
@@ -53,25 +51,26 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser=githubProvider.getUser(accessToken);
+        // 如果成功获取到用户数据,并且数据没有缺失
         if(githubUser !=null && githubUser.getId() !=null){
-            // 把用户数据写入数据库
-            User user = new User();
-            String token = UUID.randomUUID().toString();
-            user.setToken(token);
-            user.setName(githubUser.getName());
-            user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
-            user.setBio(githubUser.getBio());
-            user.setAvatarUrl(githubUser.getAvatarUrl());
-            userService.insertUser(user);
-            response.addCookie(new Cookie("token",token));
-            // 登录成功,写cookie和session
-            request.getSession().setAttribute("user",githubUser);
-            return "redirect:/";
+            userService.createOnUpdate(response,githubUser);
         }else{
             //登录失败,重新登录
-            return "redirect:/";
         }
+        return "redirect:/";
+    }
+
+    /** 退出登录 */
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response){
+        // 从session中移除用户数据
+        request.getSession().removeAttribute("user");
+        // 从cookie中删除token
+        Cookie cookie = new Cookie("token",null);
+        // 设置过期时间
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }
