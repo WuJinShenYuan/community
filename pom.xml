@@ -67,11 +67,11 @@
             <artifactId>lombok</artifactId>
         </dependency>
         <!-- 分页插件依赖 -->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.8</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.pagehelper</groupId>-->
+<!--            <artifactId>pagehelper-spring-boot-starter</artifactId>-->
+<!--            <version>1.2.8</version>-->
+<!--        </dependency>-->
         <!-- 热部署依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -110,14 +110,19 @@
                     <!--将当前pom的依赖项添加到生成器的类路径中-->
                     <includeCompileDependencies>true</includeCompileDependencies>
                 </configuration>
-                <dependencies>
-                    <!-- mysql的JDBC驱动 -->
-                    <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
-                        <version>8.0.21</version>
-                    </dependency>
-                </dependencies>
+<!--                <dependencies>-->
+<!--                    &lt;!&ndash; mysql的JDBC驱动 &ndash;&gt;-->
+<!--                    <dependency>-->
+<!--                        <groupId>mysql</groupId>-->
+<!--                        <artifactId>mysql-connector-java</artifactId>-->
+<!--                        <version>8.0.21</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
             </plugin>
         </plugins>
     </build>

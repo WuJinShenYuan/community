@@ -1,5 +1,22 @@
 ## 无尽深渊
 
+## 部署
+### 依赖
+- JDK
+- Maven
+- Mysql
+- Git
+### 步骤
+- yum update
+- yum install git
+- mkdir App
+- cd App
+- git https://github.com/WuJinShenYuan/community.git
+- cd community
+- yum install maven
+- mvn compile package
+- 
+
 ## 资料
 [参考: es社区](https://elasticsearch.cn/)  
 [视频教程](https://www.bilibili.com/video/BV1r4411r7au?p=4)  
