@@ -6,11 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.xjydev.community.dto.GithubUser;
 import xyz.xjydev.community.mapper.UserMapper;
 import xyz.xjydev.community.model.User;
+import xyz.xjydev.community.model.UserExample;
 import xyz.xjydev.community.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,15 +27,15 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Override
-    public void insertUser(User user) {
-        userMapper.insertUser(user);
-    }
-
-    @Override
-    public User findByToken(String token) {
-        return userMapper.findByToken(token);
-    }
+//    @Override
+//    public void insertUser(User user) {
+//        userMapper.insertUser(user);
+//    }
+//
+//    @Override
+//    public User findByToken(String token) {
+//        return userMapper.findByToken(token);
+//    }
 
     @Override
     public User FindUserByCookie(HttpServletRequest httpServletRequest) {
@@ -43,12 +45,15 @@ public class UserServiceImpl implements UserService {
             for (Cookie cookie : cookies) {
                 if(cookie.getName().equals("token")){
                     String token=cookie.getValue();
-                    User user=userMapper.findByToken(token);
-                    if(user !=null){
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria()
+                            .andTokenEqualTo(token);
+                    List<User> users=userMapper.selectByExample(userExample);
+                    if(users.size() !=0){
                         if(httpServletRequest.getSession().getAttribute("user")==null){
-                            httpServletRequest.getSession().setAttribute("user",user);
+                            httpServletRequest.getSession().setAttribute("user",users.get(0));
                         }
-                        return user;
+                        return users.get(0);
                     }
                     break;
                 }
@@ -57,12 +62,16 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    /** 插入或更新user数据 */
     @Override
     public void createOnUpdate(HttpServletResponse response, GithubUser githubUser) {
-        User dbUser=userMapper.findByAccountId(String.valueOf(githubUser.getId()));
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andAccountIdEqualTo(String.valueOf(githubUser.getId()));
+        List<User> users=userMapper.selectByExample(userExample);
         System.out.println("成功");
         // 判断数据库是否已经有user数据
-        if(dbUser==null){
+        if(users.size()==0){
             // 插入
             System.out.println("插入");
             User user = new User();
@@ -75,17 +84,21 @@ public class UserServiceImpl implements UserService {
             user.setBio(githubUser.getBio());
             user.setAvatarUrl(githubUser.getAvatarUrl());
             response.addCookie(new Cookie("token",token));
-            userMapper.insertUser(user);
+            userMapper.insert(user);
 //            request.getSession().setAttribute("user",user);
         }else{
             // 更新
             System.out.println("更新");
+            User dbUser=users.get(0);
             dbUser.setName(githubUser.getName());
             dbUser.setToken(UUID.randomUUID().toString());
             dbUser.setGmtModified(System.currentTimeMillis());
             dbUser.setBio(githubUser.getBio());
             dbUser.setAvatarUrl(githubUser.getAvatarUrl());
-            userMapper.updateUser(dbUser);
+            UserExample userExample1 = new UserExample();
+            userExample1.createCriteria()
+                    .andAccountIdEqualTo(String.valueOf(githubUser.getId()));
+            userMapper.updateByExampleSelective(dbUser, userExample1);
         }
     }
 }

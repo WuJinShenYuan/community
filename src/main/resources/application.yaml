@@ -1,8 +1,9 @@
-# ·şÎñÆ÷¶Ë¿ÚÅäÖÃ
+# æœåŠ¡å™¨ç«¯å£é…ç½®
 server:
   port: 8887
 
-# È«¾ÖÊôĞÔÅäÖÃ
+
+# å…¨å±€å±æ€§é…ç½®
 github:
   client:
     id: d02bb3f971ea9947d521
@@ -10,33 +11,52 @@ github:
   redirect:
     url: http://localhost:8887/callback
 
-# Êı¾İ¿âÁ¬½ÓÅäÖÃ
+
 spring:
+  # æ•°æ®åº“è¿æ¥é…ç½®
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/communitydb?useUnicode=true&useSSL=false&characterEncoding=UTF8&serverTimezone=UTC
     username: root
     password: cptbtptq123asdqw
-  # ¹Ø±ÕthymeleafÒ³Ãæ»º´æ
-  thymeleaf.cache: false
+  # å…³é—­thymeleafé¡µé¢ç¼“å­˜
+  thymeleaf:
+    cache: false
+  # å¼€å¯çƒ­éƒ¨ç½²
   devtools:
-    # ÈÈ²¿ÊğÉúĞ§
+    # çƒ­éƒ¨ç½²ç”Ÿæ•ˆ
     restart.enabled: true
-    # ÊÇ·ñÖ§³Ölivereload
+    # æ˜¯å¦æ”¯æŒlivereload
     livereload:
       enabled: true
     restart:
-      # ÉèÖÃÖØÆôµÄÄ¿Â¼,Ìí¼ÓÄÇ¸öÄ¿Â¼µÄÎÄ¼şĞèÒªrestart
+      # è®¾ç½®é‡å¯çš„ç›®å½•,æ·»åŠ é‚£ä¸ªç›®å½•çš„æ–‡ä»¶éœ€è¦restart
       additional-paths: src/main/*
-      # ÉèÖÃ²»ĞèÒªÖØÆôµÄÄ¿Â¼
+      # è®¾ç½®ä¸éœ€è¦é‡å¯çš„ç›®å½•
       exclude: static/**,public/**
+  # flyway
+  # æ‰“å¼€flyway
+  flyway:
+    enabled: true
+    encoding: utf-8
+    # sqlæ–‡ä»¶å­˜æ”¾ä½ç½®
+    locations: classpath:db/migration
+    # ç‰ˆæœ¬è®°å½•è¡¨æ ¼
+    table: schemas_version
+    # å¦‚æœæ•°æ®åº“ä¸æ˜¯ç©ºè¡¨ï¼Œéœ€è¦è®¾ç½®æˆ trueï¼Œå¦åˆ™å¯åŠ¨æŠ¥é”™
+    baseline-on-migrate: true
+    validate-on-migrate: true
 
-# ÆôÓÃÍÕ·å×Ô¶¯×ª»»ÏÂ»®Ïß
+
 mybatis:
   configuration:
+    # å¯ç”¨é©¼å³°è‡ªåŠ¨è½¬æ¢ä¸‹åˆ’çº¿
     map-underscore-to-camel-case: true
+  type-aliases-package: xyz.xjydev.community.model
+  mapper-locations: classpath:mapper/*.xml
 
-# pagehelper·ÖÒ³²å¼şÅäÖÃ
+
+# pagehelperåˆ†é¡µæ’ä»¶é…ç½®
 pagehelper:
   helperDialect: mysql
   reasonable: true

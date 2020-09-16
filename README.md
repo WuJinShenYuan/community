@@ -17,7 +17,8 @@
 [okHttp](https://square.github.io/okhttp/)  
 [jQuery](https://jquery.com/download/)  
 [Lombok](https://projectlombok.org/)  
-
+[Flyway](https://flywaydb.org/getstarted/)  
+[Mybatis Generator](https://mybatis.org/generator/)  
 ## 脚本
 ```创建user表
 CREATE TABLE `user`(
@@ -26,7 +27,9 @@ CREATE TABLE `user`(
 	name VARCHAR(50),
 	token CHAR(36),
 	gmt_create BIGINT,
-	gmt_modified BIGINT
+	gmt_modified BIGINT,
+    bio VARCHAR(255),
+    avatar_url VARCHAR(100) 
 )ENGINE=Innodb DEFAULT CHARSET=utf8;
 ```
 ```创建question表
@@ -42,4 +45,8 @@ CREATE TABLE `question`(
 	like_count INT DEFAULT 0,
 	tag VARCHAR(255)
 )ENGINE=Innodb DEFAULT CHARSET=utf8;
+```
+```bash
+mvn flyway:migrate
+mvn -Dmybatis.generator.overwrite = true mybatis-generator：generate
 ```

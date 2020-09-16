@@ -1,5 +1,6 @@
 package xyz.xjydev.community.service.impl;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import xyz.xjydev.community.dto.QuestionDTO;
 import xyz.xjydev.community.mapper.QuestionMapper;
 import xyz.xjydev.community.mapper.UserMapper;
 import xyz.xjydev.community.model.Question;
+import xyz.xjydev.community.model.QuestionExample;
 import xyz.xjydev.community.model.User;
 import xyz.xjydev.community.service.QuestionService;
 
@@ -33,7 +35,7 @@ public class QuestionServiceImpl implements QuestionService {
     /** 把问题数据写入数据库 */
     @Override
     public void createQuestion(Question question) {
-        questionMapper.createQuestion(question);
+        questionMapper.insertSelective(question);
     }
 
     /** 输出问题数据列表
@@ -42,7 +44,7 @@ public class QuestionServiceImpl implements QuestionService {
      * @return*/
     @Override
     public PaginationDTO findQuestionList(Integer page, Integer size) {
-        Integer totalCount=questionMapper.selectTotal();
+        Integer totalCount=(int) questionMapper.countByExample(new QuestionExample());
         // 有多少页
         Integer totalPage = 0;
         if (totalCount % size == 0) {
@@ -60,13 +62,13 @@ public class QuestionServiceImpl implements QuestionService {
         if(offset<0){
             offset=0;
         }
-        List<Question> questionList=questionMapper.findQuestionList(offset,size);
+        List<Question> questionList=questionMapper.selectByExampleWithRowbounds(new QuestionExample(),new RowBounds(offset,size));
 
         /** 给questionDTOList写入数据 */
         List<QuestionDTO> questionDTOList=new ArrayList<>();
         PaginationDTO paginationDTO = new PaginationDTO();
         for (Question question : questionList) {
-            User user=userMapper.findById(question.getCreator());
+            User user=userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO=new QuestionDTO();
             BeanUtils.copyProperties(question,questionDTO);
             questionDTO.setUser(user);
@@ -83,7 +85,10 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public PaginationDTO findQuestionListById(Integer id, Integer page, Integer size) {
         // 当前用户的问题数据数
-         Integer totalCountById =questionMapper.selectTotalById(id);
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria()
+                .andCreatorEqualTo(id);
+        Integer totalCountById=(int) questionMapper.countByExample(questionExample);
 
         // 有多少页
         Integer totalPage = 0;
@@ -104,13 +109,16 @@ public class QuestionServiceImpl implements QuestionService {
         if(offset<0){
             offset=0;
         }
-        List<Question> questionList=questionMapper.findQuestionListById(id,offset,size);
+        QuestionExample questionExample1 = new QuestionExample();
+        questionExample1.createCriteria()
+                .andCreatorEqualTo(id);
+        List<Question> questionList=questionMapper.selectByExampleWithRowbounds(questionExample1,new RowBounds(offset,size));
 
         /** 给questionDTOList写入数据 */
         List<QuestionDTO> questionDTOList=new ArrayList<>();
         PaginationDTO paginationDTO = new PaginationDTO();
         for (Question question : questionList) {
-            User user=userMapper.findById(question.getCreator());
+            User user=userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO=new QuestionDTO();
             BeanUtils.copyProperties(question,questionDTO);
             questionDTO.setUser(user);
@@ -127,8 +135,8 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionDTO getById(Integer id) {
 
         // 根据问题id查询问题数据,并放入DTO中
-        Question question= questionMapper.findById(id);
-        User user=userMapper.findById(question.getCreator());
+        Question question= questionMapper.selectByPrimaryKey(id);
+        User user=userMapper.selectByPrimaryKey(question.getCreator());
         QuestionDTO questionDTO=new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
         questionDTO.setUser(user);
@@ -142,11 +150,14 @@ public class QuestionServiceImpl implements QuestionService {
             // 插入
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.createQuestion(question);
+            questionMapper.insertSelective(question);
         }else{
             // 更新
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.updateQuestion(question);
+            QuestionExample updateExample = new QuestionExample();
+            updateExample.createCriteria()
+                    .andCreatorEqualTo(question.getCreator());
+            questionMapper.updateByExampleSelective(question,updateExample);
         }
     }
 }
