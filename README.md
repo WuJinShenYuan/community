@@ -11,11 +11,14 @@
 - yum install git
 - mkdir App
 - cd App
-- git https://github.com/WuJinShenYuan/community.git
+- git clone https://github.com/WuJinShenYuan/community.git
 - cd community
 - yum install maven
 - mvn compile package
-- 
+- cp src/main/resources/application.yaml src/main/resources/application-production.yaml
+- vim src/main/resources/application-production.yaml 
+- mvn package
+- java -jar -Dspring.profiles.active=production target/community-0.0.1-SNAPSHOT.jar
 
 ## 资料
 [参考: es社区](https://elasticsearch.cn/)  
