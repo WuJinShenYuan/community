@@ -18,11 +18,13 @@ public class CommunityApplication {
         SpringApplication.run(CommunityApplication.class, args);
     }
 
+    /** 将http重定向至https */
     @Bean
     public ServletWebServerFactory servletContainer() {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
             @Override
             protected void postProcessContext(Context context) {
+                // SecurityConstraint必须存在，可以通过其为不同的URL设置不同的重定向策略。
                 SecurityConstraint securityConstraint = new SecurityConstraint();
                 securityConstraint.setUserConstraint("CONFIDENTIAL");
                 SecurityCollection collection = new SecurityCollection();
@@ -43,5 +45,6 @@ public class CommunityApplication {
         connector.setRedirectPort(443);
         return connector;
     }
+
 
 }
