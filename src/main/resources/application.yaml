@@ -1,6 +1,16 @@
 # 服务器端口配置
 server:
   port: 8887
+  #证书的路径
+  ssl:
+    key-store: classpath:3556783_www.xjydev.xyz.pfx
+    #证书密码，请修改为您自己证书的密码.
+    key-store-password: 49BQtNsF
+    #秘钥库类型
+    keyStoreType: PKCS12
+    #证书别名
+    keyAlias: tomcat
+
 
 
 # 全局属性配置

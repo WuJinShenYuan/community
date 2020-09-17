@@ -33,7 +33,7 @@
                         <h4 class="media-heading"><a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a></h4>
                         <span class="index_question_text" th:text="${question.commentCount}+' 个评论 • '"></span>
                         <span class="index_question_text" th:text="${question.viewCount}+' 次浏览 • '"></span>
-                        <span class="index_question_text" th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
+                        <span class="index_question_text" th:text="'发布时间: '+${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
                     </div>
                     <hr />
                 </div>
